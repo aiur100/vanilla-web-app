@@ -2,7 +2,7 @@ const storeKey = "xxx";
 
 export function setItem(key,value){
 	let state = getState();
-	if(state[key])
+	if(state && state[key])
 		state[key] = value;
 	else
 		state = { [key] : value };
