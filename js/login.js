@@ -2,6 +2,14 @@
 import * as app from './appState.js';
 import * as ui from './ui.js';
 
+const user = app.getItem('user');
+// redirect 
+if(user){
+	window.location.href = "/";
+}
+
+ui.hideOverlay();
+
 const login = document.getElementById('login-button');
 const email = document.getElementById('email');
 const pass = document.getElementById('password');

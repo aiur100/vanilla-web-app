@@ -1,5 +1,6 @@
 'use strict';
 import * as app from './appState.js';
+import { hideOverlay,showOverlay } from './ui.js';
 
 const user = app.getItem('user');
 
@@ -7,6 +8,8 @@ const user = app.getItem('user');
 if(!user){
 	window.location.href = "/login";
 }
+
+hideOverlay();
 
 const logOut = document.getElementById('log-out');
 

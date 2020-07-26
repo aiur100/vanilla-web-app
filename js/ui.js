@@ -42,3 +42,13 @@ export function stopButtonLoading(buttonElement){
 	buttonElement.disabled = false;
 	buttonElement.innerHTML = prevText;
 }
+
+export function showOverlay(){
+	document.getElementById('loadingOverlay').classList.remove('d-none');
+}
+
+export function hideOverlay(){
+	setTimeout(function(){
+		document.getElementById('loadingOverlay').classList.add('d-none');
+	},1000);
+}
