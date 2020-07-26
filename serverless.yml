@@ -1,0 +1,62 @@
+service: vanilla-testing
+
+package:
+  exclude:
+    - node_modules/**
+    - "*.html"
+    - css/**
+    - "*.json"
+    - "*.md"
+    - js/**
+    - configs/**
+    #- '!node_modules/node-fetch/**'
+custom:
+  userPool: ${self:service}-${opt:stage, self:provider.stage}-user-pool
+  userPoolClient: ${self:custom.userPool}-client
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+
+functions:
+  hello:
+    handler: api/handler.hello
+    events:
+      - http:
+          path: '/hello'
+          method: get
+resources:
+  Resources:
+    CognitoUserPool:
+      Type: AWS::Cognito::UserPool
+      Properties:
+        # Generate a name based on the stage
+        UserPoolName: ${self:custom.userPool}
+        # Set email as an alias
+        UsernameAttributes:
+          - email
+        AutoVerifiedAttributes:
+          - email
+    CognitoUserPoolClient:
+      Type: AWS::Cognito::UserPoolClient
+      Properties:
+        # Generate an app client name based on the stage
+        ClientName: ${self:custom.userPoolClient}
+        UserPoolId:
+          Ref: CognitoUserPool
+        ExplicitAuthFlows:
+          - ADMIN_NO_SRP_AUTH
+        GenerateSecret: false
+
+  # Print out the Id of the User Pool that is created
+  Outputs:
+    UserPoolId:
+      Value:
+        Ref: CognitoUserPool
+
+    UserPoolClientId:
+      Value:
+        Ref: CognitoUserPoolClient
